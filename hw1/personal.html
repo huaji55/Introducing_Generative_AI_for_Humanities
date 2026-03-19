@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>極簡數位名片</title>
+    <style>
+        /* CSS 變數與基礎設定 */
+        :root {
+            --primary-bg: #f8f9fa;
+            --accent-color: #4a90e2; /* 藍色，專業 */
+            --text-color: #333;
+            --secondary-text: #666;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            --transition-speed: 0.3s;
+            --border-radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            cursor: pointer; /* 提示背景可點擊 */
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        /* 核心名片容器 */
+        .digital-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            padding: 40px;
+            transition: transform var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .digital-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 個人大頭照與互動 */
+        .profile-pic-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: transform var(--transition-speed) ease;
+            cursor: default; /* 照片不觸發背景點擊 */
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CSS 互動: 滑鼠移到照片上旋轉 */
+        .profile-pic-container:hover {
+            transform: rotate(360deg);
+        }
+
+        /* 個人資訊 */
+        h1.name {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        p.intro {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: var(--secondary-text);
+            line-height: 1.5;
+        }
+
+        /* 社群連結按鈕 */
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .link-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        .link-btn:hover {
+            background-color: #357abd; /* 深一點的藍色 */
+            transform: scale(1.02);
+        }
+
+        /* 響應式設計: 手機平板 */
+        @media (max-width: 480px) {
+            .digital-card {
+                padding: 30px 20px;
+            }
+
+            .profile-pic-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            h1.name {
+                font-size: 1.5rem;
+            }
+
+            p.intro {
+                font-size: 0.95rem;
+            }
+
+            .link-btn {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body id="card-body">
+
+    <div class="digital-card" id="digital-card">
+        <div class="profile-pic-container">
+            <img src="1.jpg" alt="個人大頭照" class="profile-pic">
+        </div>
+
+        <h1 class="name">周琮恩 (Adam)</h1>
+        <p class="intro">點擊方框外面背景換顏色</p>
+
+        <div class="social-links">
+            <a href="https://instagram.com/" target="_blank" class="link-btn">Instagram</a>
+            <a href="https://github.com/" target="_blank" class="link-btn">GitHub</a>
+            <a href="mailto:hello@example.com" class="link-btn">Email</a>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript 互動: 點擊背景換顏色
+        const body = document.getElementById('card-body');
+        const card = document.getElementById('digital-card');
+
+        const colors = [
+            '#f8f9fa', // 默認 (Light Gray)
+            '#e8f0fe', // 淺藍
+            '#e0f7fa', // 淺綠
+            '#fdf2e9'  // 淺橘
+        ];
+
+        let currentColorIndex = 0;
+
+        function changeBackgroundColor(event) {
+            // 防止點擊名片本身觸發背景點擊
+            if (event.target === body || event.target.closest('#digital-card')) {
+                // 如果點擊了卡片內部，除非是 body，否則不應換色
+                // 我們希望只有點擊「卡片外」的空白區域才換色
+                // 但卡片內部按鈕需要單獨處理
+            }
+        }
+
+        // 修改點擊邏輯，讓名片內部的按鈕正常運作，只有點擊「卡片外部的背景」才換色
+        body.addEventListener('click', (event) => {
+            // 檢查點擊目標是否是卡片本身或卡片內的元素
+            const isClickInsideCard = card.contains(event.target);
+
+            if (!isClickInsideCard) {
+                // 只有點擊卡片外部的 body 區域，才換色
+                currentColorIndex = (currentColorIndex + 1) % colors.length;
+                body.style.backgroundColor = colors[currentColorIndex];
+                console.log(`背景顏色切換為: ${colors[currentColorIndex]}`);
+            }
+        } );
+    </script>
+</body>
+</html>
